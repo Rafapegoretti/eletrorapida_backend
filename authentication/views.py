@@ -14,7 +14,11 @@ from django.utils.encoding import force_bytes, force_str
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+from .serializers import (
+    LogoutSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer,
+)
 
 User = get_user_model()
 
@@ -22,6 +26,9 @@ User = get_user_model()
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=LogoutSerializer, responses={205: "No content", 400: "Bad request"}
+    )
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]
@@ -29,6 +36,9 @@ class LogoutView(APIView):
             token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
+            print("request _________________________________")
+            print(request.data)
+            print("request _________________________________")
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
