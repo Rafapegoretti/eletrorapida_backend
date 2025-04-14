@@ -37,16 +37,13 @@ class ComponentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Filtra os componentes de acordo com a busca
         queryset = self.queryset.filter(
             Q(name__icontains=search_term) | Q(description__icontains=search_term)
         )
 
         found = queryset.exists()
 
-        # Cria o log
         SearchLog.objects.create(search_term=search_term, found=found)
 
-        # Serializa e retorna
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

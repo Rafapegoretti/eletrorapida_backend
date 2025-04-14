@@ -73,7 +73,9 @@ class RequestPasswordResetView(APIView):
         token = default_token_generator.make_token(user)
 
         # Exemplo de link apontando para o front-end
-        reset_link = f"http://localhost:8000/reset-password?uid={uid}&token={token}"
+        reset_link = (
+            f"http://localhost:8080/password-reset-confirm?uid={uid}&token={token}"
+        )
 
         # Envia o e-mail (ajuste subject, from_email, etc.)
         subject = "Recuperação de Senha"
