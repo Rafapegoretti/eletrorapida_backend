@@ -14,6 +14,7 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    url="http://localhost:8000",
 )
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path("auth/", include("authentication.urls")),
     path("users/", include("users.urls")),
     path("components/", include("components.urls")),
+    path("api/", include("componentes.urls")),
     path("dashboard/", include("dashboard.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

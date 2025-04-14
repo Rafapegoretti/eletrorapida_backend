@@ -2,7 +2,9 @@ from rest_framework import serializers
 from .models import Component
 
 
-class ComponentSerializer(serializers.ModelSerializer):
+class ComponentSerializer(
+    serializers.ModelSerializer
+):  # Serializer apenas. -> clean ou validate - valid_data
     class Meta:
         model = Component
         fields = [

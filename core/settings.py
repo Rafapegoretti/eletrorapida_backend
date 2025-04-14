@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "components",
     "logs",
     "dashboard",
+    "componentes",
 ]
 
 AUTH_USER_MODEL = "users.User"
