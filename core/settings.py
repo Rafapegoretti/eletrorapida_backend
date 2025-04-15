@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     "logs",
     "dashboard",
     "componentes",
+    "componenteteste",
+    "logsystem",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -74,7 +76,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "corsheaders.middleware.CorsMiddleware",
+    "logsystem.middleware.ErrorLoggingMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"

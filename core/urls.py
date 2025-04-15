@@ -27,6 +27,7 @@ urlpatterns = [
     path("auth/", include("authentication.urls")),
     path("users/", include("users.urls")),
     path("components/", include("components.urls")),
+    path("componenteteste/", include("components.urls")),
     path("api/", include("componentes.urls")),
     path("dashboard/", include("dashboard.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
