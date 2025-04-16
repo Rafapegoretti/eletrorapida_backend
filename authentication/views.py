@@ -27,6 +27,10 @@ User = get_user_model()
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    # Classe responsável pelo logout do usuário
+    # Ele coloca o refrash token gerado no login
+    # e coloca numa blacklist para não ter mais o acesso ao sistema
+
     @swagger_auto_schema(
         request_body=LogoutSerializer, responses={205: "No content", 400: "Bad request"}
     )
@@ -42,6 +46,10 @@ class LogoutView(APIView):
 
 class RequestPasswordResetView(APIView):
     permission_classes = [AllowAny]
+
+    # Classe responsável por enviar o email para o usuário
+    # Esse email contem o link de acesso o uid e o token para validação do usuário.
+    # O email só é enviado caso o email em questão esteja cadastrado no sistema.
 
     @swagger_auto_schema(
         request_body=PasswordResetRequestSerializer,
@@ -66,8 +74,6 @@ class RequestPasswordResetView(APIView):
                     {"detail": "Email não cadastrado"},
                     status=status.HTTP_200_OK,
                 )
-
-            # Gera o UID e o token
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
 
@@ -93,6 +99,9 @@ class RequestPasswordResetView(APIView):
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [AllowAny]
+
+    # Classe responsável por validar os dados da requisição do usuário e alterar a senha.
+    # Ela recebe o id, token e a nova senha validados o usuário e salvando a nova senha.
 
     @swagger_auto_schema(
         request_body=PasswordResetConfirmSerializer,

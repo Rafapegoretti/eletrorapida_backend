@@ -19,6 +19,9 @@ class UserListCreateAPIView(APIView):
         operation_description="Lista todos os usuários.",
         responses={200: UserSerializer(many=True)},
     )
+    # Recupera todos os usuários cadastrados no sistema.
+    # Serializa e retorna os dados em formato JSON com status 200.
+    # Em caso de erro interno, registra no sistema de logs.
     def get(self, request):
         try:
             users = User.objects.all()
@@ -36,6 +39,10 @@ class UserListCreateAPIView(APIView):
         request_body=UserSerializer,
         responses={201: UserSerializer},
     )
+    # Valida os dados recebidos e cria um novo usuário no sistema.
+    # Retorna os dados do usuário criado com status 201 em caso de sucesso.
+    # Em caso de erro de validação, retorna status 400.
+    # Em caso de erro interno, registra no sistema de logs.
     def post(self, request):
         try:
             serializer = UserSerializer(data=request.data)
@@ -57,6 +64,8 @@ class UserListCreateAPIView(APIView):
 class UserDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    # Recupera um usuário pelo ID (pk).
+    # Retorna o objeto se encontrado, ou None se o usuário não existir.
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -67,6 +76,9 @@ class UserDetailAPIView(APIView):
         operation_description="Detalhes de um usuário.",
         responses={200: UserSerializer, 404: "Usuário não encontrado"},
     )
+    # Retorna os dados detalhados de um usuário específico com base no ID informado.
+    # Se o usuário não for encontrado, retorna status 404.
+    # Em caso de erro interno, registra no sistema de logs.
     def get(self, request, pk):
         try:
             user = self.get_object(pk)
@@ -88,6 +100,11 @@ class UserDetailAPIView(APIView):
         request_body=UserSerializer,
         responses={200: UserSerializer, 404: "Usuário não encontrado"},
     )
+    # Atualiza os dados de um usuário existente com base no ID fornecido.
+    # Retorna os dados atualizados se a operação for bem-sucedida.
+    # Se o usuário não for encontrado, retorna status 404.
+    # Em caso de erro de validação, retorna status 400.
+    # Em caso de erro interno, registra no sistema de logs.
     def put(self, request, pk):
         try:
             user = self.get_object(pk)
@@ -117,6 +134,11 @@ class UserDetailAPIView(APIView):
             404: "Usuário não encontrado",
         },
     )
+    # Remove um usuário do sistema com base no ID fornecido.
+    # Retorna status 200 em caso de exclusão bem-sucedida.
+    # Se o usuário for um superusuário, a exclusão é bloqueada com status 403.
+    # Se o usuário não for encontrado, retorna status 404.
+    # Em caso de erro interno, registra no sistema de logs.
     def delete(self, request, pk):
         try:
             user = self.get_object(pk)

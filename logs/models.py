@@ -3,9 +3,8 @@ from components.models import Component
 
 
 class SearchLog(models.Model):
-    """
-    Modelo responsável por armazenar informações das pesquisas realizadas pelos usuários.
-    """
+    # Modelo responsável por registrar as buscas realizadas pelos usuários no sistema.
+    # Armazena o termo buscado, se a busca teve resultados, e o componente vinculado.
 
     search_term = models.CharField(
         max_length=255, help_text="Termo que o usuário digitou no campo de busca."

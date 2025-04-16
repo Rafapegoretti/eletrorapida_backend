@@ -9,6 +9,12 @@ from .serializers import DashboardSerializer
 
 
 class DashboardAPIView(APIView):
+    # Retorna os dados consolidados para o dashboard:
+    # - Termos de busca mais frequentes com resultados encontrados
+    # - Componentes com estoque crítico (quantidade menor ou igual a 2)
+    # - Termos de busca que não retornaram nenhum resultado
+    # Os dados são serializados e retornados em formato JSON.
+
     def get(self, request):
         top_searches = (
             SearchLog.objects.filter(found=True)

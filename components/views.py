@@ -19,11 +19,12 @@ class ComponentListCreateAPIView(APIView):
         operation_description="Lista todos os componentes.",
         responses={200: ComponentSerializer(many=True)},
     )
+
+    # Recupera todos os registros de componentes no banco de dados,
+    # serializa os resultados e retorna em formato JSON.
+    # Em caso de erro interno, registra no sistema de logs
+
     def get(self, request):
-        """
-        The function retrieves all components using a serializer and returns the data in a response,
-        handling any exceptions by logging an internal error.
-        """
         try:
             components = Component.objects.all()
             serializer = ComponentSerializer(components, many=True)
@@ -40,11 +41,13 @@ class ComponentListCreateAPIView(APIView):
         request_body=ComponentSerializer,
         responses={201: ComponentSerializer},
     )
+
+    # Valida os dados recebidos no corpo da requisição e cria um novo componente.
+    # Em caso de sucesso, retorna os dados criados com status 201.
+    # Em caso de erro de validação, retorna status 400.
+    # Em caso de erro interno, registra no sistema de logs.
+
     def post(self, request):
-        """
-        The function handles POST requests by validating and saving component data, returning
-        appropriate responses based on the outcome.
-        """
         try:
             serializer = ComponentSerializer(data=request.data)
             if serializer.is_valid():
@@ -65,12 +68,10 @@ class ComponentListCreateAPIView(APIView):
 class ComponentDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, pk):
-        """
-        The function `get_object` retrieves a Component object by its primary key, returning None if it
-        does not exist.
+    # Recupera um componente pelo ID (pk).
+    # Retorna o objeto se encontrado, ou None se não existir.
 
-        """
+    def get_object(self, pk):
         try:
             return Component.objects.get(pk=pk)
         except Component.DoesNotExist:
@@ -80,12 +81,13 @@ class ComponentDetailAPIView(APIView):
         operation_description="Obtém os detalhes de um componente pelo ID.",
         responses={200: ComponentSerializer, 404: "Componente não encontrado"},
     )
-    def get(self, request, pk):
-        """
-        This Python function retrieves a component object by its primary key and returns its serialized
-        data in a response, handling exceptions and logging errors.
 
-        """
+    # Busca um componente específico pelo ID fornecido.
+    # Retorna os dados serializados caso o componente exista.
+    # Se não for encontrado, retorna status 404.
+    # Em caso de erro interno, registra no sistema de logs.
+
+    def get(self, request, pk):
         try:
             component = self.get_object(pk)
             if not component:
@@ -107,11 +109,14 @@ class ComponentDetailAPIView(APIView):
         request_body=ComponentSerializer,
         responses={200: ComponentSerializer, 404: "Componente não encontrado"},
     )
+
+    # Atualiza os dados de um componente existente com base no ID informado.
+    # Retorna os dados atualizados se a operação for bem-sucedida.
+    # Se o componente não existir, retorna status 404.
+    # Em caso de erro de validação, retorna status 400.
+    # Em caso de erro interno, registra no sistema de logs.
+
     def put(self, request, pk):
-        """
-        The `put` function updates a component object with the provided data and returns a response
-        based on the success or failure of the update operation.
-        """
         try:
             component = self.get_object(pk)
             if not component:
@@ -140,12 +145,13 @@ class ComponentDetailAPIView(APIView):
             404: "Componente não encontrado",
         },
     )
-    def delete(self, request, pk):
-        """
-        The `delete` function deletes a component object based on the provided primary key and handles
-        exceptions by logging internal errors.
 
-        """
+    # Remove permanentemente um componente com base no ID fornecido.
+    # Retorna status 200 em caso de exclusão bem-sucedida.
+    # Se o componente não existir, retorna status 404.
+    # Em caso de erro interno, registra no sistema de logs.
+
+    def delete(self, request, pk):
         try:
             component = self.get_object(pk)
             if not component:
@@ -185,12 +191,14 @@ class ComponentSearchAPIView(APIView):
             400: "Parâmetro 'term' ausente",
         },
     )
-    def get(self, request):
-        """
-        The function retrieves components based on a search term provided in the request query
-        parameters and logs the search term along with whether any components were found.
 
-        """
+    # Realiza uma busca de componentes com base em um termo informado via query string.
+    # A busca é feita nos campos de nome e descrição.
+    # Se nenhum termo for informado, retorna status 400.
+    # Também registra a tentativa de busca no log de pesquisas.
+    # Em caso de erro interno, registra no sistema de logs.
+
+    def get(self, request):
         try:
             term = request.query_params.get("term")
             if not term:
