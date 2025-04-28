@@ -184,6 +184,7 @@ SWAGGER_SETTINGS = {
     },
     "USE_SESSION_AUTH": False,
 }
+SWAGGER_USE_COMPAT_RENDERERS = False
 
 
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
